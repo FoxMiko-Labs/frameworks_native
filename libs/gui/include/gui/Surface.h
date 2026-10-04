@@ -73,7 +73,6 @@ public:
     virtual bool needsReleaseNotify() = 0;
 
     virtual void onBuffersDiscarded(const std::vector<sp<GraphicBuffer>>& buffers) = 0;
-    virtual void onBufferDetached(uint64_t bufferId) = 0;
 
     // Called if this Surface is connected to a remote implementation and it
     // dies or becomes unavailable.
@@ -90,7 +89,6 @@ public:
     virtual void onBufferReleased() override {}
     virtual bool needsReleaseNotify() { return false; }
     virtual void onBuffersDiscarded(const std::vector<sp<GraphicBuffer>>& /*buffers*/) override {}
-    virtual void onBufferDetached(uint64_t /*bufferId*/) override {}
 };
 
 struct SurfaceQueueBufferInput {
@@ -597,10 +595,6 @@ protected:
 
         virtual bool needsReleaseNotify() override {
             return mSurfaceListener->needsReleaseNotify();
-        }
-
-        virtual void onBufferDetached(int /*slot*/, uint64_t bufferId) override {
-            mSurfaceListener->onBufferDetached(bufferId);
         }
 
         virtual void onBuffersDiscarded(const std::vector<int32_t>& slots) override;
